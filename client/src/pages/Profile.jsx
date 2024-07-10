@@ -7,7 +7,7 @@ import {
   uploadBytesResumable,
 } from 'firebase/storage';
 import { app } from '../firebase';
-import { deleteUserFailure, deleteUserStar, deleteUserSuccess, updateUserFailure, updateUserStart, updateUserSuccess } from '../redux/user/userSlice';
+import { deleteUserFailure, deleteUserStar, deleteUserSuccess, signOutUserFailure, signOutUserStar, signOutUserSuccess, updateUserFailure, updateUserStart, updateUserSuccess } from '../redux/user/userSlice';
 
 export default function Profile() {
   const fileRef = useRef(null)
@@ -97,6 +97,19 @@ export default function Profile() {
       dispatch(deleteUserFailure(error))
     }
   }
+  const handleSignOut=async()=> {
+    try {
+      dispatch(signOutUserStar())
+      const res = await fetch('/api/auth/signout')
+      const data = await res.json();
+      if(data.success === false) {
+        dispatch(signOutUserFailure(data.error))
+      }
+      dispatch(signOutUserSuccess(data))
+    } catch (error) {
+      dispatch(signOutUserFailure(error))
+    }
+  }
 
   return (
     <div className='p-3 max-w-lg mx-auto'>
@@ -135,7 +148,7 @@ export default function Profile() {
       </form>
       <div className='flex justify-between mt-5'>
         <span onClick={handleDeleteUser} className='text-red-700 cursor-pointer'>eliminar cuenta</span>
-        <span className='text-red-700 cursor-pointer'>cerrar sesión</span>
+        <span onClick={handleSignOut} className='text-red-700 cursor-pointer'>cerrar sesión</span>
       </div>
       <p className='text-red-700 mt-5'>{error ? error : ''}</p>
       <p className='text-green-700 mt-5'>{updateSuccess ? 'Usuario actualizado corectamente!' : ''}</p>
