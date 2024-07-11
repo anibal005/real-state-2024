@@ -8,6 +8,7 @@ import {
 } from 'firebase/storage';
 import { app } from '../firebase';
 import { deleteUserFailure, deleteUserStar, deleteUserSuccess, signOutUserFailure, signOutUserStar, signOutUserSuccess, updateUserFailure, updateUserStart, updateUserSuccess } from '../redux/user/userSlice';
+import { Link } from 'react-router-dom';
 
 export default function Profile() {
   const fileRef = useRef(null)
@@ -145,6 +146,9 @@ export default function Profile() {
           <button disabled={loading} className='bg-slate-700 text-white rounded-lg p-3 uppercase hover:opacity-80'>
             {loading ? 'Cargando' : 'Actualizar'}
           </button>
+          <Link className='bg-green-700 text-white p-3 rounded-lg uppercase text-center hover:opacity-95' to={"/create-listing"}>
+            Crear Listado
+          </Link>
       </form>
       <div className='flex justify-between mt-5'>
         <span onClick={handleDeleteUser} className='text-red-700 cursor-pointer'>eliminar cuenta</span>
