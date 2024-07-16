@@ -18,7 +18,7 @@ export const deleteListing = async (req, res ,next)=> {
     }
 
     if(req.user.id !== listing.userRef) {
-        return next(errorHandler(401, 'solo puedes eleiminar tu propio listado'))
+        return next(errorHandler(401, 'solo puedes eliminar tu propio listado'))
     }
     try {
         await Listing.findByIdAndDelete(req.params.id)
@@ -26,5 +26,39 @@ export const deleteListing = async (req, res ,next)=> {
     } catch (error) {
         next(error)
     }
+}
 
+export const updateListing =async(req, res, next)=> {
+    const listing = await Listing.findById(req.params.id);
+
+    if(!listing) {
+        return next(errorHandler(404, 'Listado no encontrado'))
+    }
+
+    if(req.user.id !== listing.userRef) {
+        return next(errorHandler(401, 'solo puedes actualizar tu propio listado'))
+    }
+    try {
+        const updatedListing = await Listing.findByIdAndUpdate(
+            req.params.id,
+            req.body,
+            { new: true }
+        ) 
+        res.status(200).json(updatedListing)
+    } catch (error) {
+        next(error)
+    }
+}
+
+export const getListing =async(req, res, next)=> {
+    try {
+        const listing = await Listing.findById(req.params.id);
+
+        if(!listing) {
+            return next(errorHandler(404, 'Listado no encontrado'))
+        }
+        res.status(200).json(listing)
+    } catch (error) {
+        next(error)
+    }
 }
