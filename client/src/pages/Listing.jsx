@@ -3,6 +3,7 @@ import { useParams } from 'react-router-dom';
 import { Swiper, SwiperSlide} from 'swiper/react'
 import SwiperCore from 'swiper';
 import { Navigation }  from 'swiper/modules';
+import { useSelector } from 'react-redux'
 import {
   FaBath,
   FaBed,
@@ -13,6 +14,7 @@ import {
   FaShare,
 } from 'react-icons/fa';
 import 'swiper/css/bundle';
+import Contact from '../components/Contact';
 
 export default function Listing() {
 
@@ -22,6 +24,7 @@ export default function Listing() {
     const [error, setError] = useState(false);
     const [copied, setCopied] = useState(false);
     const [contact, setContact] = useState(false);
+    const {currentUser} = useSelector(state=> state.user)
     const params = useParams();
 
     useEffect(() => {
@@ -130,6 +133,14 @@ export default function Listing() {
                 {listing.furnished ? 'Amoblado' : 'No amoblado'}
               </li>
             </ul>
+            {currentUser && listing.userRef !== currentUser._id && !contact && (
+              <button onClick={()=> setContact(true)} className='bg-slate-700 text-white rounded-lg uppercase hover:opacity-95 p-3'>
+                Contactate con el Propietario
+              </button>
+            )}
+            {contact && 
+              <Contact listing={listing}/>
+            }
           </div>
         </div>
       )}

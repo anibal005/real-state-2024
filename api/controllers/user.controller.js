@@ -3,11 +3,6 @@ import User from "../models/user.model.js";
 import { errorHandler } from "../utils/error.js"
 import bcryptjs from 'bcryptjs';
 
-export const getUser = (req,res)=> {
-    res.json({
-        message: "Hello world"
-    })
-}
 
 export const updateUser =async(req, res, next)=> {
     if(req.user.id !== req.params.id) return next(errorHandler(401, "Solo puedes actualizar tu cuenta"));
@@ -52,5 +47,19 @@ export const getUserListings = async(req, res, next)=> {
         }
     } else {
         return next(errorHandler(401, 'Solo puedes ver tu propio listado!'))
+    }
+}
+
+export const getUser =async(req, res, next)=> {
+    try {
+        const user = await User.findById(req.params.id);
+
+        if(!user) {
+            return next(errorHandler(404, 'Usario no encontrado'))
+        }
+        const { password: pass, ...rest} = user._doc
+        res.status(200).json(rest)
+    } catch (error) {
+        next(error)
     }
 }
