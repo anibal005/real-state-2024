@@ -126,7 +126,7 @@ export default function Listing() {
               </li>
               <li className='flex items-center gap-1 whitespace-nowrap '>
                 <FaParking className='text-lg'/>
-                {listing.parkin ? 'Con Garaje' : 'Sin Garaje'}
+                {listing.parking ? 'Con Garaje' : 'Sin Garaje'}
               </li>
               <li className='flex items-center gap-1 whitespace-nowrap '>
                 <FaChair className='text-lg'/>
